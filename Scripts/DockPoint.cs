@@ -49,7 +49,7 @@ public class DockPoint : MonoBehaviour
         transform.parent.position = OffsetPossition();
 
         float offset = 0f;
-        if (transform.localEulerAngles.y == 180)
+        if (transform.localEulerAngles.y == 180 || transform.localEulerAngles.y == 0)
             offset = 180;
 
         if (doorTag.mirror)

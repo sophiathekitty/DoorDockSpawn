@@ -9,6 +9,17 @@ public class Room : MonoBehaviour
     public RoomArea roomArea;
     public RoomType roomType;
 
+    public int doorIndex = 0;
+
+    public bool roomBlocked
+    {
+        get
+        {
+            if (roomArea == null) return false;
+            return roomArea.roomBlocked;
+        }
+    }
+
     private MeshRenderer meshRenderer;
     private MeshCollider meshCollider;
     // Start is called before the first frame update
@@ -38,7 +49,19 @@ public class Room : MonoBehaviour
             meshCollider.enabled = true;
         }
     }
-
+    public bool HasDoor(DoorTag tag)
+    {
+        foreach (DockPoint dock in dockPoints)
+        {
+            if (dock == null)
+                Debug.LogError(gameObject.name + " missing docks");
+            if (dock.doorTag == tag)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
     public DockPoint[] GetDoor(DoorTag tag)
     {
         List<DockPoint> docks = new List<DockPoint>();
@@ -50,6 +73,14 @@ public class Room : MonoBehaviour
             }
         }
         return docks.ToArray();
+    }
+
+    public void AttatchRoom(DockPoint dock)
+    {
+        DockPoint[] doors = GetDoor(dock.doorTag);
+        doorIndex = Random.Range(0, doors.Length);
+        doors[doorIndex].targetDock = dock;
+        doors[doorIndex].AlignDock();
     }
 
     /// <summary>
