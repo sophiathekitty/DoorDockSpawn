@@ -5,6 +5,8 @@ using UnityEngine;
 public class Builder : MonoBehaviour
 {
     public GameObject[] prefabs;
+    public GameObject[] plugs;
+    public int MaxRoomsPerZone = 500;
     readonly List<Room> rooms = new List<Room>();
     public int doorIndex = 0;
     public int roomIndex = 0;
@@ -88,12 +90,26 @@ public class Builder : MonoBehaviour
     public List<GameObject> RoomsWithDoor(DoorTag tag)
     {
         List<GameObject> rwd = new List<GameObject>();
-        foreach(GameObject prefab in prefabs)
+        if(rooms.Count > MaxRoomsPerZone)
         {
-            Room room = prefab.GetComponent<Room>();
-            if (room.HasDoor(tag))
+            foreach (GameObject prefab in plugs)
             {
-                rwd.Add(prefab);
+                Room room = prefab.GetComponent<Room>();
+                if (room.HasDoor(tag))
+                {
+                    rwd.Add(prefab);
+                }
+            }
+        }
+        else
+        {
+            foreach (GameObject prefab in prefabs)
+            {
+                Room room = prefab.GetComponent<Room>();
+                if (room.HasDoor(tag))
+                {
+                    rwd.Add(prefab);
+                }
             }
         }
         return rwd;
